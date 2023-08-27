@@ -21,19 +21,7 @@ import SonaVeebClient from '@lib/infrastructure/dictionary/sonaveeb/api-client';
 export default {
 	async getDictionary(logger: Logger): Promise<ExternalDictionary> {
 		if (process.env.DICTIONARY === 'sonaveeb') {
-			const wordFormFinder = new WordFormsFinder([
-				new NounStrategy(),
-				new VerbStrategy(),
-				new AdjectiveStrategy(),
-				new AdverbStrategy(),
-				new PronounStrategy(),
-				new NumberWordStrategy(),
-				new ExclamationStrategy(),
-				new ConjunctionStrategy(),
-				new PrePostPositionStrategy(),
-				new ComplementStrategy(),
-				new DefaultStrategy(),
-			]);
+			const wordFormFinder = new WordFormsFinder(this.getStrategies());
 
 			const sonaVeebClient = new SonaVeebClient(logger);
 
@@ -41,5 +29,21 @@ export default {
 		}
 
 		return new DictionaryInMemory();
+	},
+
+	getStrategies(): any[] {
+		return [
+			new NounStrategy(),
+			new VerbStrategy(),
+			new AdjectiveStrategy(),
+			new AdverbStrategy(),
+			new PronounStrategy(),
+			new NumberWordStrategy(),
+			new ExclamationStrategy(),
+			new ConjunctionStrategy(),
+			new PrePostPositionStrategy(),
+			new ComplementStrategy(),
+			new DefaultStrategy(),
+		];
 	},
 };
